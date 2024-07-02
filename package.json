@@ -1,0 +1,94 @@
+{
+  "name": "cs200",
+  "displayName": "cs200",
+  "description": "An extension for visualizing RTL simulation and RISC-V emulation for CS200 course at EPFL.\"",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cs200-sidebar",
+          "title": "cs200",
+          "icon": "media/debug.svg"
+        }
+      ]
+    },
+    "views": {
+      "cs200-sidebar": [
+        {
+          "type": "webview",
+          "id": "cs200-sidebar",
+          "name": "cs200",
+          "icon": "media/debug.svg",
+          "contextualTitle": "cs200"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "cs200.helloWorld",
+        "category": "cs200",
+        "title": "Hello World"
+      },
+      {
+        "command": "cs200.runCommand",
+        "category": "cs200",
+        "title": "Run the code"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "webpack",
+    "watch": "concurrently \"rollup -c -w\" \"webpack --watch\"",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/btoa": "^1.2.3",
+    "@types/glob": "^7.1.3",
+    "@types/googlemaps": "^3.40.3",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@types/node-fetch": "^2.5.7",
+    "@types/polka": "^0.5.1",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "concurrently": "^5.3.0",
+    "eslint": "^8.57.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "rollup": "^4.18.0",
+    "rollup-plugin-svelte": "^7.2.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "svelte": "^4.2.18",
+    "svelte-preprocess": "^6.0.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "vscode-test": "^1.4.0",
+    "webpack": "^5.92.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "rollup-plugin-css-only": "^4.5.2"
+  }
+}
