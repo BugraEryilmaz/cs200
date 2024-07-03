@@ -39,7 +39,7 @@ export class WebViewPanelProvider implements vscode.WebviewViewProvider {
   public constructor(extensionUri: vscode.Uri) {
     this._extensionUri = extensionUri;
 
-    this.terminal = new Terminal((data) => {
+    this.terminal = new Terminal((data: string) => {
       console.log("Data received", data);
       this._view?.webview.postMessage({ type: "terminal-output", value: data });
     });
