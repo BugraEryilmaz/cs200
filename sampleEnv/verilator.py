@@ -106,5 +106,8 @@ while True:
             io.leds.value = io.leds.value >> 1
             io.countersevensegment.value = io.counter.value
         print(io, flush=True)
+    elif inp.startswith("compile"):
+        from sys import stderr
+        print(data["fname"], flush=True, file=stderr)
     else:
         print(io, flush=True)

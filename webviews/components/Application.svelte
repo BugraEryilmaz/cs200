@@ -35,7 +35,7 @@
         type: "terminal-input",
         value: '{"command": "getinputs"}',
       });
-    }, 10);
+    }, 800);
   });
 
   function changeInput(input: string, value: string | number | boolean) {

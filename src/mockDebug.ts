@@ -95,7 +95,7 @@ export class MockDebugSession extends LoggingDebugSession {
 
   private _addressesInHex = true;
 
-  private _terminal?: Terminal = undefined;
+  private _terminal: Terminal;
 
   /**
    * Creates a new debug adapter that is used for one debug session.
@@ -109,6 +109,17 @@ export class MockDebugSession extends LoggingDebugSession {
     this.setDebuggerColumnsStartAt1(false);
 
     this._runtime = new MockRuntime(fileAccessor);
+
+    this._terminal = new Terminal((data) => {
+      console.log("Data received", data);
+      if (WebViewPanel.currentPanel !== undefined) {
+        WebViewPanel.currentPanel._panel.webview.postMessage({
+          // this._panel.webview.postMessage({
+          type: "terminal-output",
+          value: data,
+        });
+      }
+    });
 
     // setup event handlers
     this._runtime.on("stopOnEntry", () => {
@@ -301,6 +312,11 @@ export class MockDebugSession extends LoggingDebugSession {
     console.log(
       `disconnectRequest suspend: ${args.suspendDebuggee}, terminate: ${args.terminateDebuggee}`
     );
+
+    WebViewPanel.clearCallbacks();
+    WebViewPanel.currentPanel?.dispose();
+
+    this._terminal?.dispose();
   }
 
   protected async attachRequest(
@@ -325,24 +341,27 @@ export class MockDebugSession extends LoggingDebugSession {
 
     // start the program in the runtime
     await this._runtime.start(args.program, !!args.stopOnEntry, !args.noDebug);
-    if (this._terminal !== undefined) {
-      this._terminal.dispose();
+
+    if (this._terminal === undefined) {
+      this._terminal = new Terminal((data) => {
+        console.log("Data received", data);
+        if (WebViewPanel.currentPanel !== undefined) {
+          WebViewPanel.currentPanel._panel.webview.postMessage({
+            // this._panel.webview.postMessage({
+            type: "terminal-output",
+            value: data,
+          });
+        }
+      });
     }
 
-    await timeout(500);
-
+    this._terminal.write(
+      JSON.stringify({
+        command: "compile",
+        fname: args.program,
+      })
+    );
     vscode.commands.executeCommand("cs200.helloWorld");
-
-    this._terminal = new Terminal((data) => {
-      console.log("Data received", data);
-      if (WebViewPanel.currentPanel !== undefined) {
-        WebViewPanel.currentPanel._panel.webview.postMessage({
-          // this._panel.webview.postMessage({
-          type: "terminal-output",
-          value: data,
-        });
-      }
-    });
 
     WebViewPanel.clearCallbacks();
     WebViewPanel.addCallback((data: any) => {
