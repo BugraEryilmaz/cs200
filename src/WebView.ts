@@ -20,10 +20,19 @@ export class WebViewPanel {
 
   public static readonly viewType = "webView";
 
-  private readonly _panel: vscode.WebviewPanel;
+  public static callbacks: Function[] = [];
+
+  public readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
-  private terminal: Terminal;
+
+  public static clearCallbacks() {
+    WebViewPanel.callbacks = [];
+  }
+
+  public static addCallback(callback: Function) {
+    WebViewPanel.callbacks.push(callback);
+  }
 
   public static createOrShow(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor
@@ -41,7 +50,7 @@ export class WebViewPanel {
     const panel = vscode.window.createWebviewPanel(
       WebViewPanel.viewType,
       "Cat Coding",
-      column || vscode.ViewColumn.One,
+      vscode.ViewColumn.Two,
       getWebviewOptions(extensionUri)
     );
 
@@ -59,13 +68,9 @@ export class WebViewPanel {
 
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
+    vscode.extensions.getExtension("cs200.cs200")?.exports?.setpanel(panel);
     this._extensionUri = extensionUri;
 
-    this.terminal = new Terminal((data) => {
-      console.log("Data received", data);
-      this._panel.webview.postMessage({ type: "terminal-output", value: data });
-    });
-    this._disposables.push(this.terminal);
     // Set the webview's initial html content
     this._update();
 
@@ -85,7 +90,15 @@ export class WebViewPanel {
     // );
 
     // Handle messages from the webview
-    // this._panel.webview.onDidReceiveMessage(
+    this._panel.webview.onDidReceiveMessage(
+      async (data) => {
+        for (const callback of WebViewPanel.callbacks) {
+          callback(data);
+        }
+      },
+      null,
+      this._disposables
+    );
     //   (message) => {
     //     switch (message.command) {
     //       case "alert":
@@ -118,10 +131,10 @@ export class WebViewPanel {
     this._panel.webview.html = this._getHtmlForWebview(webview);
     webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
-        case "terminal-input": {
-          this.terminal.write(data.value);
-          break;
-        }
+        // case "terminal-input": {
+        //   this.terminal.write(data.value);
+        //   break;
+        // }
         case "onInfo": {
           if (!data.value) {
             return;

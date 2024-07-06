@@ -2,6 +2,11 @@ import * as vscode from "vscode";
 import { WebViewPanel } from "./WebView";
 import { Terminal } from "./terminal";
 import { WebViewPanelProvider } from "./sidebarprovider";
+import { activateMockDebug, workspaceFileAccessor } from "./activateMockDebug";
+
+const runMode: "external" | "server" | "namedPipeServer" | "inline" = "inline";
+
+let cs200Panel: vscode.WebviewPanel;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "cs200" is now active!');
@@ -25,6 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
       const terminal = new Terminal(showInformationMessage);
     })
   );
+
+  activateMockDebug(context);
 }
 
 function showInformationMessage(message: any) {}
