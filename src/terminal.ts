@@ -2,7 +2,7 @@ import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import * as vscode from "vscode";
 
 export class Terminal {
-  terminal: ChildProcessWithoutNullStreams;
+  terminal?: ChildProcessWithoutNullStreams;
   dummyterminaloutput: number = 0;
   callback: (data: any) => void;
 
@@ -30,7 +30,11 @@ export class Terminal {
       vscode.window.showErrorMessage(data.toString());
     });
     terminal.on("close", (code) => {
+      this.terminal = undefined;
       console.log(`child process exited with code ${code}`);
+      // if (code !== 0) {
+      //   vscode.window.showErrorMessage("There is no verilator.py on the path!");
+      // }
     });
     console.log("Data listeners added");
     this.terminal = terminal;
@@ -38,10 +42,10 @@ export class Terminal {
 
   write(data: string) {
     console.log("Writing to terminal: ", data);
-    this.terminal.stdin.write(data + "\n");
+    this.terminal?.stdin.write(data + "\n");
   }
 
   dispose() {
-    this.terminal.stdin.end();
+    this.terminal?.stdin.end();
   }
 }
