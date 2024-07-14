@@ -14,12 +14,10 @@ import {
   ProviderResult,
   CancellationToken,
 } from "vscode";
-import { MockDebugSession } from "./mockDebug";
-import { FileAccessor } from "./mockRuntime";
 
 export function activateMockDebug(
   context: vscode.ExtensionContext,
-  factory?: vscode.DebugAdapterDescriptorFactory
+  factory: vscode.DebugAdapterDescriptorFactory
 ) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -125,9 +123,6 @@ export function activateMockDebug(
     )
   );
 
-  if (!factory) {
-    factory = new InlineDebugAdapterFactory();
-  }
   context.subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory("mock", factory)
   );
@@ -248,39 +243,10 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
   }
 }
 
-export const workspaceFileAccessor: FileAccessor = {
-  isWindows: typeof process !== "undefined" && process.platform === "win32",
-  async readFile(path: string): Promise<Uint8Array> {
-    let uri: vscode.Uri;
-    try {
-      uri = pathToUri(path);
-    } catch (e) {
-      return new TextEncoder().encode(`cannot read '${path}'`);
-    }
-
-    return await vscode.workspace.fs.readFile(uri);
-  },
-  async writeFile(path: string, contents: Uint8Array) {
-    await vscode.workspace.fs.writeFile(pathToUri(path), contents);
-  },
-};
-
 function pathToUri(path: string) {
   try {
     return vscode.Uri.file(path);
   } catch (e) {
     return vscode.Uri.parse(path);
-  }
-}
-
-class InlineDebugAdapterFactory
-  implements vscode.DebugAdapterDescriptorFactory
-{
-  createDebugAdapterDescriptor(
-    _session: vscode.DebugSession
-  ): ProviderResult<vscode.DebugAdapterDescriptor> {
-    return new vscode.DebugAdapterInlineImplementation(
-      new MockDebugSession(workspaceFileAccessor)
-    );
   }
 }
