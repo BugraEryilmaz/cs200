@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
-import { Terminal } from "./terminal";
 
 function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
   return {
@@ -68,7 +67,6 @@ export class WebViewPanel {
 
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
-    vscode.extensions.getExtension("cs200.cs200")?.exports?.setpanel(panel);
     this._extensionUri = extensionUri;
 
     // Set the webview's initial html content
