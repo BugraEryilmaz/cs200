@@ -52,12 +52,13 @@ class DebugAdapterExecutableFactory
   ): ProviderResult<vscode.DebugAdapterDescriptor> {
     // param "executable" contains the executable optionally specified in the package.json (if any)
 
-    // use the executable specified in the package.json if it exists or determine it based on some other information (e.g. the session)
-    if (!executable) {
-      const command = "Vtb";
-      const args: string[] | undefined = [];
-      const options = {};
-      executable = new vscode.DebugAdapterExecutable(command, args, options);
+    // Check Vtb executable on each workspace folder
+    for (const folder of vscode.workspace.workspaceFolders || []) {
+      const executablePath = folder.uri.fsPath + "/Vtb";
+      if (require("fs").existsSync(executablePath)) {
+        executable = new vscode.DebugAdapterExecutable(executablePath);
+        break;
+      }
     }
     console.log("Executable: ", executable);
 

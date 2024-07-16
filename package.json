@@ -107,7 +107,6 @@
           "markdown"
         ],
         "label": "Mock Debug",
-        "program": "../cs-200/src/DebugAdapter/out/obj_dir/Vtb",
         "configurationAttributes": {
           "launch": {
             "required": [
