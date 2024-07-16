@@ -20,23 +20,19 @@
       "editor/title/run": [
         {
           "command": "extension.cs200.runEditorContents",
-          "when": "resourceLangId == markdown",
           "group": "navigation@1"
         },
         {
           "command": "extension.cs200.debugEditorContents",
-          "when": "resourceLangId == markdown",
           "group": "navigation@2"
         }
       ],
       "commandPalette": [
         {
-          "command": "extension.cs200.debugEditorContents",
-          "when": "resourceLangId == markdown"
+          "command": "extension.cs200.debugEditorContents"
         },
         {
-          "command": "extension.cs200.runEditorContents",
-          "when": "resourceLangId == markdown"
+          "command": "extension.cs200.runEditorContents"
         }
       ],
       "debug/variables/context": [
@@ -111,8 +107,7 @@
           "markdown"
         ],
         "label": "Mock Debug",
-        "program": "./out/debugAdapter.js",
-        "runtime": "node",
+        "program": "../cs-200/src/DebugAdapter/out/obj_dir/Vtb",
         "configurationAttributes": {
           "launch": {
             "required": [

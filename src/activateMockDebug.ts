@@ -14,6 +14,27 @@ import {
   ProviderResult,
   CancellationToken,
 } from "vscode";
+import * as cp from 'child_process';
+
+function compileFile(filePath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // strip the basename of the file
+    const basename = filePath.split("/").pop();
+    // strip the extension of the file
+    const name = basename?.split(".").shift();
+    // get the directory of the file
+    const dir = filePath.split("/").slice(0, -1).join("/");
+
+    cp.exec(`make ${name}`, { cwd: dir }, (error, stdout, stderr) => {
+      if (error) {
+        vscode.window.showErrorMessage(`Compilation error: ${stderr}`);
+        reject(error);
+      } else {
+        resolve();
+      }
+    },);
+  });
+}
 
 export function activateMockDebug(
   context: vscode.ExtensionContext,
@@ -43,12 +64,13 @@ export function activateMockDebug(
     ),
     vscode.commands.registerCommand(
       "extension.cs200.debugEditorContents",
-      (resource: vscode.Uri) => {
+      async (resource: vscode.Uri) => {
         let targetResource = resource;
         if (!targetResource && vscode.window.activeTextEditor) {
           targetResource = vscode.window.activeTextEditor.document.uri;
         }
         if (targetResource) {
+          await compileFile(targetResource.fsPath);
           vscode.debug.startDebugging(undefined, {
             type: "mock",
             name: "Debug File",

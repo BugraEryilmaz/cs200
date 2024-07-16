@@ -53,11 +53,12 @@ class DebugAdapterExecutableFactory
     // param "executable" contains the executable optionally specified in the package.json (if any)
 
     // use the executable specified in the package.json if it exists or determine it based on some other information (e.g. the session)
-    const command =
-      "/home/bugra/ders/PhD/cs200-ta/gitlabCS200/src/DebugAdapter/out/obj_dir/Vtb";
-    const args: string[] | undefined = [];
-    const options = {};
-    executable = new vscode.DebugAdapterExecutable(command, args, options);
+    if (!executable) {
+      const command = "Vtb";
+      const args: string[] | undefined = [];
+      const options = {};
+      executable = new vscode.DebugAdapterExecutable(command, args, options);
+    }
     console.log("Executable: ", executable);
 
     // make VS Code launch the DA executable
