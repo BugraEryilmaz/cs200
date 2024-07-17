@@ -39,7 +39,7 @@
   <div class="led-row">
     {#each ledrow as led, j}
       <div class="led" style="background-color: {led ? 'red' : 'black'};">
-        {led ? "1" : "0"}
+        {led ? "" : ""}
       </div>
     {/each}
   </div>
@@ -48,12 +48,13 @@
 <style>
   .led-row {
     display: flex;
+    margin: 0;
   }
 
   .led {
     width: 20px;
     height: 20px;
-    border: 1px solid black;
+    border: 1px solid grey;
     display: flex;
     justify-content: center;
     align-items: center;

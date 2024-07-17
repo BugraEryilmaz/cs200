@@ -6,10 +6,11 @@
     UpdateInput_t,
   } from "../types/input";
   import LedArray from "./LedArray.svelte";
+  import SevenSegmentArray from "./SevenSegmentArray.svelte";
 
   let ledArray: LedArray_t = {
-    width: 8,
-    height: 8,
+    width: 12,
+    height: 10,
     value: 0,
     direction: "output",
   };
@@ -41,7 +42,7 @@
   }
 </script>
 
-<button
+<!-- <button
   class:notactive={!enable}
   on:click={() => {
     enable = !enable;
@@ -50,7 +51,9 @@
   }}
 >
   enable
-</button>
+</button> -->
+
+<SevenSegmentArray values={[0, 1, 2, 3]} />
 
 <LedArray
   width={ledArray.width}
