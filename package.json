@@ -16,52 +16,33 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "assembly",
+        "extensions": [
+          ".s",
+          ".asm"
+        ]
+      },
+      {
+        "id": "verilog",
+        "extensions": [
+          ".v",
+          ".sv"
+        ]
+      }
+    ],
     "menus": {
       "editor/title/run": [
         {
-          "command": "extension.cs200.runEditorContents",
-          "group": "navigation@1"
-        },
-        {
           "command": "extension.cs200.debugEditorContents",
+          "when": "editorLangId == 'assembly'",
           "group": "navigation@2"
         }
       ],
       "commandPalette": [
         {
           "command": "extension.cs200.debugEditorContents"
-        },
-        {
-          "command": "extension.cs200.runEditorContents"
-        }
-      ],
-      "debug/variables/context": [
-        {
-          "command": "extension.cs200.toggleFormatting",
-          "when": "debugType == 'mock' && debugProtocolVariableMenuContext == 'simple'"
-        }
-      ]
-    },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "cs200-sidebar",
-          "title": "cs200",
-          "icon": "media/debug.svg"
-        }
-      ]
-    },
-    "views": {
-      "cs200-sidebar": [
-        {
-          "type": "webview",
-          "id": "cs200-sidebar",
-          "name": "cs200",
-          "icon": "media/debug.svg",
-          "contextualTitle": "cs200",
-          "webview": {
-            "retainContextWhenHidden": false
-          }
         }
       ]
     },
@@ -74,49 +55,31 @@
         "icon": "$(debug-alt)"
       },
       {
-        "command": "extension.cs200.runEditorContents",
-        "title": "Run File",
-        "category": "Mock Debug",
-        "enablement": "!inDebugMode",
-        "icon": "$(play)"
-      },
-      {
-        "command": "extension.cs200.toggleFormatting",
-        "title": "Toggle between decimal and hex formatting"
-      },
-      {
         "command": "cs200.helloWorld",
         "category": "cs200",
         "title": "Hello World"
-      },
-      {
-        "command": "cs200.runCommand",
-        "category": "cs200",
-        "title": "Run the code"
       }
     ],
     "breakpoints": [
       {
-        "language": "markdown"
+        "language": "assembly"
       }
     ],
     "debuggers": [
       {
         "type": "mock",
         "languages": [
-          "markdown"
+          "assembly",
+          "verilog"
         ],
         "label": "Mock Debug",
         "configurationAttributes": {
           "launch": {
-            "required": [
-              "program"
-            ],
             "properties": {
               "program": {
                 "type": "string",
                 "description": "Absolute path to a text file.",
-                "default": "${workspaceFolder}/${command:AskForProgramName}"
+                "default": "${workspaceFolder}/Vtb"
               },
               "stopOnEntry": {
                 "type": "boolean",
@@ -127,56 +90,6 @@
                 "type": "boolean",
                 "description": "Enable logging of the Debug Adapter Protocol.",
                 "default": true
-              },
-              "compileError": {
-                "type": "string",
-                "description": "Simulates a compile error in 'launch' request.",
-                "enum": [
-                  "default",
-                  "show",
-                  "hide"
-                ],
-                "enumDescriptions": [
-                  "default: show fake compile error to user",
-                  "show fake compile error to user",
-                  "do not show fake compile error to user"
-                ]
-              }
-            }
-          },
-          "attach": {
-            "required": [
-              "program"
-            ],
-            "properties": {
-              "program": {
-                "type": "string",
-                "description": "Absolute path to a text file.",
-                "default": "${workspaceFolder}/${command:AskForProgramName}"
-              },
-              "stopOnEntry": {
-                "type": "boolean",
-                "description": "Automatically stop after attach.",
-                "default": true
-              },
-              "trace": {
-                "type": "boolean",
-                "description": "Enable logging of the Debug Adapter Protocol.",
-                "default": true
-              },
-              "compileError": {
-                "type": "string",
-                "description": "Simulates a compile error in 'attach' request.",
-                "enum": [
-                  "default",
-                  "show",
-                  "hide"
-                ],
-                "enumDescriptions": [
-                  "default: show fake compile error to user",
-                  "show fake compile error to user",
-                  "do not show fake compile error to user"
-                ]
               }
             }
           }

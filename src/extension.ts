@@ -24,8 +24,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.debug.onDidTerminateDebugSession((e) => {
     console.log("Debug session terminated");
-    if (cs200Panel) {
-      cs200Panel.dispose();
+    if (WebViewPanel.currentPanel) {
+      WebViewPanel.currentPanel.dispose();
     }
   });
 
