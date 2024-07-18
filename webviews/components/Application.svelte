@@ -42,7 +42,7 @@
   }
 </script>
 
-<!-- <button
+<button
   class:notactive={!enable}
   on:click={() => {
     enable = !enable;
@@ -51,7 +51,7 @@
   }}
 >
   enable
-</button> -->
+</button>
 
 <SevenSegmentArray values={[0, 1, 2, 3]} />
 
