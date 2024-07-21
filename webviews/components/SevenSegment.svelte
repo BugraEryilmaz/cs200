@@ -63,7 +63,7 @@
   }
 
   .display-container div.dot.active {
-    background-color: green;
+    background-color: rgb(0, 255, 0);
   }
 
   .display-container span.segment-border {
@@ -126,19 +126,19 @@
   }
 
   .display-container.display-size-12 .segment-x.active {
-    border-bottom: 6px solid green;
+    border-bottom: 6px solid rgb(0, 255, 0);
   }
 
   .display-container.display-size-12 .segment-x.active .segment-border {
-    border-top: 6px solid green;
+    border-top: 6px solid rgb(0, 255, 0);
   }
 
   .display-container.display-size-12 .segment-y.active {
-    border-right: 6px solid green;
+    border-right: 6px solid rgb(0, 255, 0);
   }
 
   .display-container.display-size-12 .segment-y.active .segment-border {
-    border-left: 6px solid green;
+    border-left: 6px solid rgb(0, 255, 0);
   }
 
   .display-container.display-size-12 .segment-a {

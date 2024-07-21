@@ -3,18 +3,15 @@
   import type {
     BoardUpdate_t,
     LedArray_t,
+    SevenSegment_t,
     UpdateInput_t,
   } from "../types/input";
   import LedArray from "./LedArray.svelte";
   import SevenSegmentArray from "./SevenSegmentArray.svelte";
 
-  let ledArray: LedArray_t = {
-    width: 12,
-    height: 10,
-    value: 0,
-    direction: "output",
-  };
-  let enable: Boolean = false;
+  let ledArray: LedArray_t = {};
+
+  let sevenSegment: SevenSegment_t = {};
 
   onMount(() => {
     window.addEventListener("message", (event) => {
@@ -23,7 +20,8 @@
       if (message.type === "boardUpdate") {
         // parse the body of the message
         const data = message.body as BoardUpdate_t;
-        if (data.ledArray) ledArray = data.ledArray;
+        ledArray = data.ledArray;
+        sevenSegment = data.sevenSegment;
         console.log(data);
       }
     });
@@ -31,9 +29,8 @@
 
   function changeInput(input: string, value: number) {
     let args: UpdateInput_t = {
-      name: input,
-      value: value,
-      type: "number",
+      joystick: {},
+      button: {},
     };
     tsvscode.postMessage({
       command: "updateInput",
@@ -42,24 +39,14 @@
   }
 </script>
 
-<button
-  class:notactive={!enable}
-  on:click={() => {
-    enable = !enable;
-    changeInput("enable", enable ? 1 : 0);
-    console.log("enable " + enable);
-  }}
->
-  enable
-</button>
-
-<SevenSegmentArray values={[0, 1, 2, 3]} />
-
-<LedArray
-  width={ledArray.width}
-  height={ledArray.height}
-  leds={Number(ledArray.value)}
+<SevenSegmentArray
+  zero={sevenSegment.zero}
+  one={sevenSegment.one}
+  two={sevenSegment.two}
+  three={sevenSegment.three}
 />
+
+<LedArray {ledArray} />
 
 <style>
   .notactive {

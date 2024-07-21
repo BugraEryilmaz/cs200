@@ -1,44 +1,48 @@
 <script lang="ts">
-  export let width: number | undefined;
-  export let height: number | undefined;
-  export let leds: number;
-  let ledArray: boolean[][] = [];
+  import type { LedArray_t } from "../types/input";
+
+  const width = 12;
+  const height = 10;
+  export let ledArray: LedArray_t = {
+    r: Array.from({ length: height }, () => 0),
+    g: Array.from({ length: height }, () => 0),
+    b: Array.from({ length: height }, () => 0),
+  };
+  let r: number[][];
+  let g: number[][];
+  let b: number[][];
   $: {
-    if (width !== undefined && height !== undefined) {
-      if (ledArray.length !== height) {
-        ledArray = new Array(height);
-        for (let i = 0; i < height; i++) {
-          ledArray[i] = new Array(width).fill(false);
-        }
-        console.log("ledArray.length !== height");
-      }
-
-      if (ledArray[0].length !== width) {
-        ledArray = new Array(height);
-        for (let i = 0; i < height; i++) {
-          ledArray[i] = new Array(width).fill(false);
-        }
-        console.log("ledArray[0].length !== width");
-      }
-
-      for (let j = 0; j < height; j++) {
-        for (let i = 0; i < width; i++) {
-          ledArray[j][i] =
-            (leds & (1 << ((height - j - 1) * width + width - i - 1))) !== 0;
-          console.log("ledArray j:" + j + " i:" + i + " " + ledArray[j][i]);
-          console.log(ledArray);
-        }
-      }
-      console.log(ledArray);
-    }
+    r = Array.from({ length: height }, (_, hidx) =>
+      Array.from({ length: width }, (_, widx) => {
+        if (!ledArray.r) return 0;
+        return (ledArray.r[hidx] & (1 << widx)) > 0 ? 1 : 0;
+      })
+    );
+    g = Array.from({ length: height }, (_, hidx) =>
+      Array.from({ length: width }, (_, widx) => {
+        if (!ledArray.g) return 0;
+        return (ledArray.g[hidx] & (1 << widx)) > 0 ? 1 : 0;
+      })
+    );
+    b = Array.from({ length: height }, (_, hidx) =>
+      Array.from({ length: width }, (_, widx) => {
+        if (!ledArray.b) return 0;
+        return (ledArray.b[hidx] & (1 << widx)) > 0 ? 1 : 0;
+      })
+    );
   }
 </script>
 
 <!-- Show an array of 1s and 0s depending on the value of leds at each bit -->
-{#each ledArray as ledrow, i}
+{#each r as ledrow, i}
   <div class="led-row">
     {#each ledrow as led, j}
-      <div class="led" style="background-color: {led ? 'red' : 'black'};">
+      <div
+        class="led"
+        style="background-color: rgb({r[i][j] === 1 ? 255 : 0}, {g[i][j] === 1
+          ? 255
+          : 0}, {b[i][j] === 1 ? 255 : 0});"
+      >
         {led ? "" : ""}
       </div>
     {/each}
@@ -58,5 +62,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(255, 255, 255);
   }
 </style>

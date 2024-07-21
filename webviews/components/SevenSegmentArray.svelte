@@ -1,17 +1,16 @@
 <script lang="ts">
-    import Apastrophe from "./Apastrophe.svelte";
-    import Colon from "./Colon.svelte";
   import SevenSegment from "./SevenSegment.svelte";
-  export let values: number[] = [0, 0, 0, 0];
+  export let zero: number = 0;
+  export let one: number = 0;
+  export let two: number = 0;
+  export let three: number = 0;
 </script>
 
 <div class="SevenSegments">
-  <SevenSegment value={values[0]} />
-  <SevenSegment value={values[1]} />
-  <Colon value={values[4]}/>
-  <SevenSegment value={values[2]} />
-  <Apastrophe value={values[4]}/>
-  <SevenSegment value={values[3]} />
+  <SevenSegment value={three} />
+  <SevenSegment value={two} />
+  <SevenSegment value={one} />
+  <SevenSegment value={zero} />
 </div>
 
 <style>
