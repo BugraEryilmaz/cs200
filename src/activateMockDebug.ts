@@ -14,34 +14,7 @@ import {
   ProviderResult,
   CancellationToken,
 } from "vscode";
-import * as cp from "child_process";
 
-function compileFile(filePath: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    // strip the basename of the file
-    const basename = filePath.split("/").pop();
-    // strip the extension of the file
-    const name = basename?.split(".").shift();
-    // get the directory of the file
-    const dir = filePath.split("/").slice(0, -1).join("/");
-
-    cp.exec(`make clean${name}`, { cwd: dir }, (error, stdout, stderr) => {
-      if (error) {
-        vscode.window.showErrorMessage(`Compilation error: ${stderr}`);
-        reject(error);
-      } else {
-        cp.exec(`make ${name}`, { cwd: dir }, (error, stdout, stderr) => {
-          if (error) {
-            vscode.window.showErrorMessage(`Compilation error: ${stderr}`);
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      }
-    });
-  });
-}
 
 export function activateMockDebug(
   context: vscode.ExtensionContext,
@@ -59,7 +32,7 @@ export function activateMockDebug(
           vscode.debug.startDebugging(
             undefined,
             {
-              type: "mock",
+              type: "cs200",
               name: "Run File",
               request: "launch",
               program: targetResource.fsPath,
@@ -71,15 +44,14 @@ export function activateMockDebug(
     ),
     vscode.commands.registerCommand(
       "extension.cs200.debugEditorContents",
-      async (resource: vscode.Uri) => {
+      (resource: vscode.Uri) => {
         let targetResource = resource;
         if (!targetResource && vscode.window.activeTextEditor) {
           targetResource = vscode.window.activeTextEditor.document.uri;
         }
         if (targetResource) {
-          await compileFile(targetResource.fsPath);
           vscode.debug.startDebugging(undefined, {
-            type: "mock",
+            type: "cs200",
             name: "Debug File",
             request: "launch",
             program: targetResource.fsPath,
@@ -130,19 +102,19 @@ export function activateMockDebug(
             {
               name: "Dynamic Launch",
               request: "launch",
-              type: "mock",
+              type: "cs200",
               program: "${file}",
             },
             {
               name: "Another Dynamic Launch",
               request: "launch",
-              type: "mock",
+              type: "cs200",
               program: "${file}",
             },
             {
               name: "Mock Launch",
               request: "launch",
-              type: "mock",
+              type: "cs200",
               program: "${file}",
             },
           ];
@@ -153,7 +125,7 @@ export function activateMockDebug(
   );
 
   context.subscriptions.push(
-    vscode.debug.registerDebugAdapterDescriptorFactory("mock", factory)
+    vscode.debug.registerDebugAdapterDescriptorFactory("cs200", factory)
   );
   if ("dispose" in factory && typeof factory.dispose === "function") {
     context.subscriptions.push(
@@ -251,8 +223,8 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
     // if launch.json is missing or empty
     if (!config.type && !config.request && !config.name) {
       const editor = vscode.window.activeTextEditor;
-      if (editor && editor.document.languageId === "markdown") {
-        config.type = "mock";
+      if (editor && (editor.document.languageId === "assembly" || editor.document.languageId === "verilog")) {
+        config.type = "cs200";
         config.name = "Launch";
         config.request = "launch";
         config.program = "${file}";
