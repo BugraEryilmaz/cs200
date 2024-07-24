@@ -12,20 +12,20 @@
   let g: number[][];
   let b: number[][];
   $: {
-    r = Array.from({ length: height }, (_, hidx) =>
-      Array.from({ length: width }, (_, widx) => {
+    r = Array.from({ length: width }, (_, widx) =>
+      Array.from({ length: height }, (_, hidx) => {
         if (!ledArray.r) return 0;
         return (ledArray.r[hidx] & (1 << widx)) > 0 ? 1 : 0;
       })
     );
-    g = Array.from({ length: height }, (_, hidx) =>
-      Array.from({ length: width }, (_, widx) => {
+    g = Array.from({ length: width }, (_, widx) =>
+      Array.from({ length: height }, (_, hidx) => {
         if (!ledArray.g) return 0;
         return (ledArray.g[hidx] & (1 << widx)) > 0 ? 1 : 0;
       })
     );
-    b = Array.from({ length: height }, (_, hidx) =>
-      Array.from({ length: width }, (_, widx) => {
+    b = Array.from({ length: width }, (_, widx) =>
+      Array.from({ length: height }, (_, hidx) => {
         if (!ledArray.b) return 0;
         return (ledArray.b[hidx] & (1 << widx)) > 0 ? 1 : 0;
       })
@@ -34,9 +34,9 @@
 </script>
 
 <!-- Show an array of 1s and 0s depending on the value of leds at each bit -->
-{#each r as ledrow, i}
+{#each r as ledcolumn, i}
   <div class="led-row">
-    {#each ledrow as led, j}
+    {#each ledcolumn as led, j}
       <div
         class="led"
         style="background-color: rgb({r[i][j] === 1 ? 255 : 0}, {g[i][j] === 1
@@ -51,12 +51,12 @@
 
 <style>
   .led-row {
-    display: flex;
+    display: inline-block;
     margin: 0;
   }
 
   .led {
-    width: 20px;
+    width: 30px;
     height: 20px;
     border: 1px solid grey;
     display: flex;
