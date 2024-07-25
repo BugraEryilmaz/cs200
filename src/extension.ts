@@ -78,7 +78,8 @@ class DebugAdapterExecutableFactory
         const executablePath = folder.uri.fsPath + "/Vtb";
         if (require("fs").existsSync(executablePath)) {
           executable = new vscode.DebugAdapterExecutable(
-            executablePath
+            executablePath,
+            [_session.configuration.program]
           );
           break;
         }
