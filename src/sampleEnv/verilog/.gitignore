@@ -1,0 +1,4 @@
+out/**
+dump.vcd
+log.txt
+.vscode/**

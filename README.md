@@ -1,71 +1,36 @@
 # cs200 README
 
-This is the README for your extension "cs200". After writing up a brief description, we recommend including the following sections.
+This is an extension for the cs200 course at EPFL. It provides a debugger extension for the students to debug their assembly and verilog code using a virtual Gecko 5 board.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Debugging assembly and verilog code
+- Having a virtual Gecko 5 board view
+- Setting breakpoints
+- Stepping through the code
+- Viewing the registers and memory
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+The extension assumes the following:
+
+- There is a `Makefile` in the same folder as the file the student presses debug button on. We will provide the `Makefile` for the students.
+- The `Makefile` has the following targets:
+  - `build_{BINARY_NAME}`: builds the assembly or verilog code
+  - `clean`: cleans the build directory
+- After the build, there should be an executable called `Vtb` in the root folder of the current workspace. For assembly assignments, we will provide the `Vtb` executable from the CPU we have written in verilog. For verilog assignments, the makefile should generate the `Vtb` executable. This executable should implement the debug adapter protocol.
+- After the build, if the compiled verilog supports `mem_init` functionality, there should be a binary file called `{BINARY_NAME}.bin` and an executable that is compiled with debug symbols and called `{BINARY_NAME}` in the `out` directory.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-- `myExtension.enable`: Enable/disable this extension.
-- `myExtension.thing`: Set to `blah` to do something.
+Will be added later.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+If you wncounter any issues, please report them on the GitHub page of the extension.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release of cs200 extension.

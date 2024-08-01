@@ -1,6 +1,11 @@
 {
   "name": "cs200",
   "displayName": "cs200",
+  "publisher": "cs200",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BugraEryilmaz/cs200"
+  },
   "description": "An extension for visualizing RTL simulation and RISC-V emulation for CS200 course at EPFL.\"",
   "version": "0.0.1",
   "engines": {
@@ -98,27 +103,22 @@
           {
             "type": "cs200",
             "request": "launch",
-            "name": "Ask for file name",
-            "program": "${workspaceFolder}/${command:AskForProgramName}",
+            "program": "${workspaceFolder}/Vtb",
             "stopOnEntry": true
           }
         ],
         "configurationSnippets": [
           {
             "label": "Mock Debug: Launch",
-            "description": "A new configuration for 'debugging' a user selected markdown file.",
+            "description": "A new configuration for 'debugging' a user selected verilog and assembly file.",
             "body": {
               "type": "cs200",
               "request": "launch",
-              "name": "Ask for file name",
-              "program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\"",
+              "program": "^\"\\${workspaceFolder}/\\Vtb\"",
               "stopOnEntry": true
             }
           }
-        ],
-        "variables": {
-          "AskForProgramName": "extension.cs200.getProgramName"
-        }
+        ]
       }
     ]
   },

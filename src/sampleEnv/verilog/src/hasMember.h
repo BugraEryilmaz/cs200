@@ -1,0 +1,1 @@
+../../../DebugAdapter/hasMember.h

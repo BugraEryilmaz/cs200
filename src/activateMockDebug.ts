@@ -15,33 +15,11 @@ import {
   CancellationToken,
 } from "vscode";
 
-
 export function activateMockDebug(
   context: vscode.ExtensionContext,
   factory: vscode.DebugAdapterDescriptorFactory
 ) {
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "extension.cs200.runEditorContents",
-      (resource: vscode.Uri) => {
-        let targetResource = resource;
-        if (!targetResource && vscode.window.activeTextEditor) {
-          targetResource = vscode.window.activeTextEditor.document.uri;
-        }
-        if (targetResource) {
-          vscode.debug.startDebugging(
-            undefined,
-            {
-              type: "cs200",
-              name: "Run File",
-              request: "launch",
-              program: targetResource.fsPath,
-            },
-            { noDebug: true }
-          );
-        }
-      }
-    ),
     vscode.commands.registerCommand(
       "extension.cs200.debugEditorContents",
       (resource: vscode.Uri) => {
@@ -59,41 +37,19 @@ export function activateMockDebug(
           });
         }
       }
-    ),
-    vscode.commands.registerCommand(
-      "extension.cs200.toggleFormatting",
-      (variable) => {
-        const ds = vscode.debug.activeDebugSession;
-        if (ds) {
-          ds.customRequest("toggleFormatting");
-        }
-      }
-    )
-  );
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "extension.cs200.getProgramName",
-      (config) => {
-        return vscode.window.showInputBox({
-          placeHolder:
-            "Please enter the name of a markdown file in the workspace folder",
-          value: "readme.md",
-        });
-      }
     )
   );
 
   // register a configuration provider for 'mock' debug type
   const provider = new MockConfigurationProvider();
   context.subscriptions.push(
-    vscode.debug.registerDebugConfigurationProvider("mock", provider)
+    vscode.debug.registerDebugConfigurationProvider("cs200", provider)
   );
 
   // register a dynamic configuration provider for 'mock' debug type
   context.subscriptions.push(
     vscode.debug.registerDebugConfigurationProvider(
-      "mock",
+      "cs200",
       {
         provideDebugConfigurations(
           folder: WorkspaceFolder | undefined
@@ -101,18 +57,6 @@ export function activateMockDebug(
           return [
             {
               name: "Dynamic Launch",
-              request: "launch",
-              type: "cs200",
-              program: "${file}",
-            },
-            {
-              name: "Another Dynamic Launch",
-              request: "launch",
-              type: "cs200",
-              program: "${file}",
-            },
-            {
-              name: "Mock Launch",
               request: "launch",
               type: "cs200",
               program: "${file}",
@@ -132,82 +76,6 @@ export function activateMockDebug(
       factory as vscode.DebugAdapterDescriptorFactory & { dispose(): void }
     );
   }
-
-  // override VS Code's default implementation of the debug hover
-  // here we match only Mock "variables", that are words starting with an '$'
-  context.subscriptions.push(
-    vscode.languages.registerEvaluatableExpressionProvider("markdown", {
-      provideEvaluatableExpression(
-        document: vscode.TextDocument,
-        position: vscode.Position
-      ): vscode.ProviderResult<vscode.EvaluatableExpression> {
-        const VARIABLE_REGEXP = /\$[a-z][a-z0-9]*/gi;
-        const line = document.lineAt(position.line).text;
-
-        let m: RegExpExecArray | null;
-        while ((m = VARIABLE_REGEXP.exec(line))) {
-          const varRange = new vscode.Range(
-            position.line,
-            m.index,
-            position.line,
-            m.index + m[0].length
-          );
-
-          if (varRange.contains(position)) {
-            return new vscode.EvaluatableExpression(varRange);
-          }
-        }
-        return undefined;
-      },
-    })
-  );
-
-  // override VS Code's default implementation of the "inline values" feature"
-  context.subscriptions.push(
-    vscode.languages.registerInlineValuesProvider("markdown", {
-      provideInlineValues(
-        document: vscode.TextDocument,
-        viewport: vscode.Range,
-        context: vscode.InlineValueContext
-      ): vscode.ProviderResult<vscode.InlineValue[]> {
-        const allValues: vscode.InlineValue[] = [];
-
-        for (
-          let l = viewport.start.line;
-          l <= context.stoppedLocation.end.line;
-          l++
-        ) {
-          const line = document.lineAt(l);
-          var regExp = /\$([a-z][a-z0-9]*)/gi; // variables are words starting with '$'
-          do {
-            var m = regExp.exec(line.text);
-            if (m) {
-              const varName = m[1];
-              const varRange = new vscode.Range(
-                l,
-                m.index,
-                l,
-                m.index + varName.length
-              );
-
-              // some literal text
-              //allValues.push(new vscode.InlineValueText(varRange, `${varName}: ${viewport.start.line}`));
-
-              // value found via variable lookup
-              allValues.push(
-                new vscode.InlineValueVariableLookup(varRange, varName, false)
-              );
-
-              // value determined via expression evaluation
-              //allValues.push(new vscode.InlineValueEvaluatableExpression(varRange, varName));
-            }
-          } while (m);
-        }
-
-        return allValues;
-      },
-    })
-  );
 }
 
 class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
@@ -223,7 +91,11 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
     // if launch.json is missing or empty
     if (!config.type && !config.request && !config.name) {
       const editor = vscode.window.activeTextEditor;
-      if (editor && (editor.document.languageId === "assembly" || editor.document.languageId === "verilog")) {
+      if (
+        editor &&
+        (editor.document.languageId === "assembly" ||
+          editor.document.languageId === "verilog")
+      ) {
         config.type = "cs200";
         config.name = "Launch";
         config.request = "launch";
@@ -241,13 +113,5 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
     }
 
     return config;
-  }
-}
-
-function pathToUri(path: string) {
-  try {
-    return vscode.Uri.file(path);
-  } catch (e) {
-    return vscode.Uri.parse(path);
   }
 }
