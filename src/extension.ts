@@ -68,6 +68,11 @@ class DebugAdapterExecutableFactory
     // Compile the program
     output.appendLine("Program: " + _session.configuration.program);
     await compileFile(_session.configuration.program);
+
+    const args = _session.configuration.trace
+      ? [_session.configuration.program]
+      : [];
+
     const dir = _session.configuration.program
       .split("/")
       .slice(0, -1)
@@ -79,9 +84,7 @@ class DebugAdapterExecutableFactory
       output.appendLine("Checking: " + executablePath + " ");
       if (existsSync(executablePath)) {
         output.appendLine("Executable found: " + executablePath);
-        executable = new vscode.DebugAdapterExecutable(executablePath, [
-          _session.configuration.program,
-        ]);
+        executable = new vscode.DebugAdapterExecutable(executablePath, args);
       }
     }
     // Check Vtb executable on each workspace folder
@@ -91,9 +94,7 @@ class DebugAdapterExecutableFactory
         output.appendLine("Checking: " + executablePath);
         if (existsSync(executablePath)) {
           output.appendLine("Executable found: " + executablePath);
-          executable = new vscode.DebugAdapterExecutable(executablePath, [
-            _session.configuration.program,
-          ]);
+          executable = new vscode.DebugAdapterExecutable(executablePath, args);
           break;
         }
       }

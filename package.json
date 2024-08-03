@@ -41,7 +41,7 @@
       "editor/title/run": [
         {
           "command": "extension.cs200.debugEditorContents",
-          "when": "editorLangId == 'assembly' || editorLangId == 'verilog'",
+          "when": "editorLangId == 'assembly' || editorLangId == 'verilog' || editorLangId == 'system verilog'",
           "group": "navigation@2"
         }
       ],
@@ -75,7 +75,8 @@
         "type": "cs200",
         "languages": [
           "assembly",
-          "verilog"
+          "verilog",
+          "system verilog"
         ],
         "label": "CS200 Debugger",
         "configurationAttributes": {
@@ -94,7 +95,7 @@
               "trace": {
                 "type": "boolean",
                 "description": "Enable logging of the Debug Adapter Protocol.",
-                "default": true
+                "default": false
               }
             }
           }

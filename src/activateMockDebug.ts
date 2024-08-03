@@ -94,7 +94,8 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
       if (
         editor &&
         (editor.document.languageId === "assembly" ||
-          editor.document.languageId === "verilog")
+          editor.document.languageId === "verilog" ||
+          editor.document.languageId === "system verilog")
       ) {
         config.type = "cs200";
         config.name = "Launch";
