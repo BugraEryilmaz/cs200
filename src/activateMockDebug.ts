@@ -93,7 +93,8 @@ class MockConfigurationProvider implements vscode.DebugConfigurationProvider {
       const editor = vscode.window.activeTextEditor;
       if (
         editor &&
-        (editor.document.languageId === "assembly" ||
+        (editor.document.languageId === "riscv" ||
+          editor.document.languageId === "assembly" ||
           editor.document.languageId === "verilog" ||
           editor.document.languageId === "system verilog")
       ) {

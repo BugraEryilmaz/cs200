@@ -41,7 +41,7 @@
       "editor/title/run": [
         {
           "command": "extension.cs200.debugEditorContents",
-          "when": "editorLangId == 'assembly' || editorLangId == 'verilog' || editorLangId == 'system verilog'",
+          "when": "editorLangId == 'riscv' || editorLangId == 'assembly' || editorLangId == 'verilog' || editorLangId == 'system verilog'",
           "group": "navigation@2"
         }
       ],
@@ -67,6 +67,9 @@
     ],
     "breakpoints": [
       {
+        "language": "riscv"
+      },
+      {
         "language": "assembly"
       }
     ],
@@ -74,6 +77,7 @@
       {
         "type": "cs200",
         "languages": [
+          "riscv",
           "assembly",
           "verilog",
           "system verilog"

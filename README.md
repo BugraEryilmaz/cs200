@@ -31,6 +31,14 @@ If you wncounter any issues, please report them on the GitHub page of the extens
 
 ## Release Notes
 
+### 0.2.1
+
+Added language support for riscv defined by RISC-V Support.
+
+### 0.2.0
+
+Bug fixes and improvements.
+
 ### 0.1.0
 
 Initial release of cs200 extension.
