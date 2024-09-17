@@ -1,0 +1,3 @@
+[submodule "sampleFolders/Vtb_src"]
+	path = sampleFolders/Vtb_src
+	url = https://github.com/BugraEryilmaz/Vtb_src.git
