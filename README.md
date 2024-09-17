@@ -1,6 +1,6 @@
 # cs200 README
 
-This is an extension for the cs200 course at EPFL. It provides a debugger extension for the students to debug their assembly and verilog code using a virtual Gecko 5 board.
+This is a VS Code extension for the cs200 course at EPFL. It provides a debugger extension for the students to debug their assembly and verilog code using a virtual Gecko 5 board.
 
 Sample folders for assembly and Verilog are available on our GitHub page: [https://github.com/BugraEryilmaz/cs200](https://github.com/BugraEryilmaz/cs200) in`sampleFolders/assembly` and `sampleFolders/Verilog` folders, respectively. If you need to build the debugger (Vtb executable required for the assembly), its source code is available as a submodule in `sampleFolders/Vtb_src` folder. To initialize the submodules, you can use the following command `git submodule update --init`.
 
