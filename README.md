@@ -29,7 +29,7 @@ Will be added later.
 
 ## Known Issues
 
-If you wncounter any issues, please report them on the GitHub page of the extension.
+If you encounter any issues, please report them on the GitHub page of the extension.
 
 ## Release Notes
 
