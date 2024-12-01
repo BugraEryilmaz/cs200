@@ -21,6 +21,18 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration":[
+      {
+        "title": "CS200",
+        "properties": {
+          "cs200.trace": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable logging of the CPU internal signals to be used with GTKWave and logging of Debug Adapter communication."
+          }
+        }
+      }
+    ],
     "languages": [
       {
         "id": "assembly",

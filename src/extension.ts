@@ -11,6 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.debug.onDidStartDebugSession((e) => {
     output.appendLine("Debug session started");
+    output.appendLine("Configuration trace: " + vscode.workspace.getConfiguration("cs200").get("trace", false));
     vscode.commands.executeCommand("cs200.helloWorld");
     WebViewPanel.clearCallbacks();
     WebViewPanel.addCallback((message: any) => {

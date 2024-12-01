@@ -34,6 +34,7 @@ export function activateMockDebug(
             request: "launch",
             program: targetResource.fsPath,
             stopOnEntry: true,
+            trace: vscode.workspace.getConfiguration("cs200").get("trace", false),
           });
         }
       }

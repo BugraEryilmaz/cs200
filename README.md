@@ -33,6 +33,10 @@ If you encounter any issues, please report them on the GitHub page of the extens
 
 ## Release Notes
 
+### 0.2.2
+
+Added trace option to the settings.
+
 ### 0.2.1
 
 Added language support for riscv defined by RISC-V Support.
