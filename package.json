@@ -7,7 +7,7 @@
     "url": "https://github.com/BugraEryilmaz/cs200"
   },
   "description": "An extension for visualizing RTL simulation and RISC-V emulation for CS200 course at EPFL.\"",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -21,7 +21,7 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "configuration":[
+    "configuration": [
       {
         "title": "CS200",
         "properties": {
